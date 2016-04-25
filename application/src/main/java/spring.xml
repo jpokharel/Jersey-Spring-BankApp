@@ -10,33 +10,11 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 
-	<!-- aop:aspectj-autoproxy / -->
-	<context:annotation-config />
-	<context:component-scan base-package="bankingapplication.application">
-	</context:component-scan>
-
-	<!-- Spring Driver Manager does not support connection pooling so we can 
-		use dbcp -->
-	<!-- <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"> 
-		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" 
-		/> <property name="url" value="jdbc:oracle:thin:@localhost:1521:oracle" /> 
-		<property name="username" value="system" /> <property name="password" value="Jiwan251" 
-		/> </bean> -->
-
-	<!-- We use dbcp as follows, just by changing the class path nothing else 
-		is changed. -->
-	<!-- The jar is to be added but no need to make code changes.Also we can 
-		add pool size properties as: -->
-
-	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
-		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url" value="jdbc:oracle:thin:@localhost:1521:oracle" />
-		<property name="username" value="system" />
-		<property name="password" value="Jiwan251" />
-		<property name="initialSize" value="2" />
-		<property name="maxTotal" value="5" />
-		<!-- maxActive property not used by dbcp2, instead it is maxTotal -->
-	</bean>
+	
+	<jdbc:embedded-database id="dataSource" type="H2">
+		<jdbc:script location="classpath:schema.sql"/>
+		<jdbc:script location="classpath:data.sql"/>
+	</jdbc:embedded-database>
 
 	<!-- For SimpleJdbcDao -->
 	<bean id="accountDetailsDaoImpl"
@@ -46,6 +24,11 @@
 
 	<!-- Service Bean Created here despite having the annotation -->
 	<bean id="accountDetailsService"
-		class="bankingapplication.application.service.AccountDetailsService" />
+		class="bankingapplication.application.service.AccountDetailsService" >
+		<property name="daoImpl" ref="accountDetailsDaoImpl" />
+	</bean>
 
+	<bean id="bankAccountResource" class="bankingapplication.application.resource.BankAccountResource" >
+		<property name="accountDetailsService" ref="accountDetailsService" />
+	</bean>
 </beans>

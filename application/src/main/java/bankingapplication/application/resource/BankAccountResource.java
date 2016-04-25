@@ -28,7 +28,15 @@ import bankingapplication.application.service.AccountDetailsService;
 public class BankAccountResource {
 
 	//@Autowired
-	private AccountDetailsService accountDetailsService=new AccountDetailsService();
+	private AccountDetailsService accountDetailsService; //=new AccountDetailsService();
+
+	public AccountDetailsService getAccountDetailsService() {
+		return accountDetailsService;
+	}
+
+	public void setAccountDetailsService(AccountDetailsService accountDetailsService) {
+		this.accountDetailsService = accountDetailsService;
+	}
 
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)

@@ -10,7 +10,15 @@ import bankingapplication.application.model.Account;
 public class AccountDetailsService {
 
 	//@Autowired
-	private AccountDetailsDaoImpl daoImpl=new AccountDetailsDaoImpl();
+	private AccountDetailsDaoImpl daoImpl; //=new AccountDetailsDaoImpl();
+
+	public AccountDetailsDaoImpl getDaoImpl() {
+		return daoImpl;
+	}
+
+	public void setDaoImpl(AccountDetailsDaoImpl daoImpl) {
+		this.daoImpl = daoImpl;
+	}
 
 	public Account getAccountDetails(int accountId) {
 		if(accountId<1)
